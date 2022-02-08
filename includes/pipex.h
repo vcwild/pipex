@@ -6,11 +6,13 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 19:47:17 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/07 19:51:56 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/07 23:42:07 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
+# define PIPEX_H
 
+# include <unistd.h>
 
 #endif

@@ -41,6 +41,7 @@ SOURCE_FILES =	main.c\
 				setters.c\
 				parsers.c\
 				free.c\
+				handlers.c\
 
 SOURCES = $(addprefix $(SOURCES_PATH)/,$(SOURCE_FILES))
 

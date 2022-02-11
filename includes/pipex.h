@@ -6,7 +6,7 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 19:47:17 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/11 01:14:36 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/11 01:26:45 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,13 @@ void	free_str(char **str);
 void	free_matrix(void ***mat);
 void	free_ptr(void **ptr);
 
-int		check_args(int argc, char **argv);
+int		get_args(int argc, char **argv);
 int		set_mem_alloc(t_pipex *pipex);
+int		set_references(int argc, char **argv, t_pipex *pipex);
 
-int	parse_args(char **argv, t_pipex *pipex);
+int		parse_args(char **argv, t_pipex *pipex);
+int		parse_env_path(char **envp, t_pipex *pipex);
+
+void	free_all(t_pipex *pipex);
 
 #endif

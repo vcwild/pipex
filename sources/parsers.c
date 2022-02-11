@@ -6,7 +6,7 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 23:08:29 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/11 01:24:54 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/11 12:50:52 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static	char *remove_args(char *str, char *args)
 
 	i = 0;
 	j = 0;
-	while (str[i])
+	while (i < (int)ft_strlen(str))
 	{
 		k = -1;
 		while (args[++k])
@@ -76,16 +76,18 @@ int	parse_args(char **argv, t_pipex *pipex)
 int	parse_env_path(char **envp, t_pipex *pipex)
 {
 	char	*path_str;
+	char	**tmp_envp;
 
 	path_str = NULL;
-	while (*envp)
+	tmp_envp = envp;
+	while (*tmp_envp)
 	{
-		if (ft_strncmp("PATH", *envp, 4) == 0)
+		if (ft_strncmp("PATH", *tmp_envp, 4) == 0)
 		{
-			path_str = ft_strdup(*envp + 5);
+			path_str = ft_strdup(*tmp_envp + 5);
 			printf("`parse_env_path` Success!\n");
 		}
-		envp++;
+		tmp_envp++;
 	}
 	if (path_str == NULL)
 		handle_exit("`parse_env_path`: PATH variable not found", 5, pipex);

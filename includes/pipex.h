@@ -6,7 +6,7 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 19:47:17 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/11 01:26:45 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/11 12:11:21 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,8 @@ int		parse_args(char **argv, t_pipex *pipex);
 int		parse_env_path(char **envp, t_pipex *pipex);
 
 void	free_all(t_pipex *pipex);
+
+void	handle_exit(char *err_msg, int pipex_errno, t_pipex *pipex);
+
 
 #endif

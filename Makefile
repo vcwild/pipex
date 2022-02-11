@@ -14,7 +14,7 @@ LIBFT_ARCHIVE = $(ARCHIVES_PATH)/$(LIBFT)
 
 INPUT_FILE = input_file
 CMD1 = "ls -l"
-CMD2 = "tr x '\'\'\'"
+CMD2 = "tr x '"
 
 OUTPUT_FILE = output_file
 
@@ -36,7 +36,6 @@ HEADER_FILE = pipex.h
 HEADER = $(addprefix $(INCLUDES_PATH)/,$(HEADER_FILE))
 
 SOURCE_FILES =	main.c\
-				rules.c\
 				getters.c\
 				setters.c\
 				parsers.c\

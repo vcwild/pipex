@@ -12,6 +12,11 @@ LIBFT = libft.a
 LIBFT_PATH = $(LIBS_PATH)/libft
 LIBFT_ARCHIVE = $(ARCHIVES_PATH)/$(LIBFT)
 
+INPUT_FILE = input_file
+CMD1 = "ls -l"
+CMD2 = "tr x '\'\'\'"
+
+OUTPUT_FILE = output_file
 
 MAKE_EXTERNAL = make -C
 SAFE_MKDIR = mkdir -p
@@ -30,7 +35,12 @@ BINS_PATH = ./bin
 HEADER_FILE = pipex.h
 HEADER = $(addprefix $(INCLUDES_PATH)/,$(HEADER_FILE))
 
-SOURCE_FILES =	main.c
+SOURCE_FILES =	main.c\
+				rules.c\
+				getters.c\
+				setters.c\
+				parsers.c\
+				free.c\
 
 SOURCES = $(addprefix $(SOURCES_PATH)/,$(SOURCE_FILES))
 
@@ -59,10 +69,11 @@ libft_clean:
 
 
 run: $(NAME)
-	@./$(NAME)
+	./$(NAME) $(INPUT_FILE) $(CMD1) $(CMD2) $(OUTPUT_FILE)
+
 
 valgrind: $(NAME)
-	$(VALGRIND) ./$(NAME)
+	@$(VALGRIND) ./$(NAME) $(INPUT_FILE) $(CMD1) $(CMD2) $(OUTPUT_FILE)
 
 re:	fclean all
 

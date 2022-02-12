@@ -415,7 +415,7 @@ t_list		*ft_lstlast(t_list *lst);
 
 /**
  * @brief Adds the `new` element at the end of the list.
- * 
+ *
  * @param lst The address of a pointer to the first link of a list
  * @param new The address of a pointer to the element to be
  * added to the list.
@@ -466,5 +466,14 @@ void		ft_lstiter(t_list *lst, void (*f)(void *));
  * @return t_list* Returns the new list or NULL if the allocation fails.
  */
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+
+/**
+ * @brief Concatenantes two strings and adds a slash between them
+ * @param origin	A pointer to the original string to concat
+ * @param other		A pointer to the second element to be concatenated
+ * @return char* Returns a new dynamically allocated string with the
+ * concatenated values of`origin` and `other` with '/' (slash) between them.
+ */
+char		*ft_slashcat(const char *origin, const char *other);
 
 #endif

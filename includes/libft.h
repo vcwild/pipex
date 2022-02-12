@@ -6,7 +6,7 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/23 15:38:07 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/10 19:22:03 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/11 20:10:40 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -478,5 +478,14 @@ void		ft_lstiter(t_list *lst, void (*f)(void *));
  * @return t_list* Returns the new list or NULL if the allocation fails.
  */
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+
+/**
+ * @brief Concatenantes two strings and adds a slash between them
+ * @param origin	A pointer to the original string to concat
+ * @param other		A pointer to the second element to be concatenated
+ * @return char* Returns a new dynamically allocated string with the
+ * concatenated values of`origin` and `other` with '/' (slash) between them.
+ */
+char		*ft_slashcat(const char *origin, const char *other);
 
 #endif

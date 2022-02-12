@@ -6,7 +6,7 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 23:08:29 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/11 12:50:52 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:45:10 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,28 @@ static char	**split_command(char *arg)
 	return (args);
 }
 
-int	parse_args(char **argv, t_pipex *pipex)
+int	parse_args(t_pipex *self, char **argv)
 {
 	int i;
 	int j;
 
 	i = -1;
-	while (++i < pipex->ncmd)
-		pipex->cmds[i] = split_command(argv[i + 2]);
+	while (++i < self->nargs)
+		self->args[i] = split_command(argv[i + 2]);
 	// TODO: remove this logging code
 	printf("`parse_args` Success!\n");
 	i = -1;
-	while (pipex->cmds[++i])
+	while (self->args[++i])
 	{
 		j = -1;
-		while (pipex->cmds[i][++j])
-			printf("cmds[%i][%i]: %s\n", i, j, pipex->cmds[i][j]);
+		while (self->args[i][++j])
+			printf("cmds[%i][%i]: %s\n", i, j, self->args[i][j]);
 	}
 	// End of logging code
 	return (0);
 }
 
-int	parse_env_path(char **envp, t_pipex *pipex)
+int	parse_env_path(t_pipex *self, char **envp)
 {
 	char	*path_str;
 	char	**tmp_envp;
@@ -90,15 +90,13 @@ int	parse_env_path(char **envp, t_pipex *pipex)
 		tmp_envp++;
 	}
 	if (path_str == NULL)
-		handle_exit("`parse_env_path`: PATH variable not found", 5, pipex);
-	pipex->envp = ft_split(path_str, ':');
+		handle_exit("`parse_env_path`: PATH variable not found", 5, self);
+	self->envp = ft_split(path_str, ':');
 	free(path_str);
 	// TODO: remove this logging message
 	int i = -1;
-	while (pipex->envp[++i])
-	{
-		printf("pipex->envp[%i] = '%s'\n", i, pipex->envp[i]);
-	}
+	while (self->envp[++i])
+		printf("pipex->envp[%i] = '%s'\n", i, self->envp[i]);
 	// End of logging message
 	return (0);
 }

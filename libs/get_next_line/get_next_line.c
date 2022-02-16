@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/16 10:08:33 by vwildner          #+#    #+#             */
+/*   Updated: 2022/02/16 10:08:54 by vwildner         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 static char	*join_and_free(char *free_me, char const *dont_free_me)
@@ -56,9 +68,9 @@ static void	set_null_line_break(char *linebreak_position,
 }
 
 static char	*read_and_join(int fd,
-						   char *read_buffer,
-						   char *line_buffer,
-						   bool *is_linebreak)
+							char *read_buffer,
+							char *line_buffer,
+							bool *is_linebreak)
 {
 	char		*linebreak_position;
 	long int	bytes_read;

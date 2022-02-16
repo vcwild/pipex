@@ -1,7 +1,7 @@
 NAME = pipex
 
 CC = gcc
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -Werror
 
 INTERNAL_LIBS = -lft -lgnl
 EXTERNAL_LIBS = -lm

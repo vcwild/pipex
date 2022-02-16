@@ -6,16 +6,16 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/29 18:12:20 by vwildner          #+#    #+#             */
-/*   Updated: 2021/05/29 18:14:33 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/16 10:07:56 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 static char	*convert_itoa(char *str,
-						  size_t size,
-						  unsigned int num,
-						  unsigned int is_negative)
+							size_t size,
+							unsigned int num,
+							unsigned int is_negative)
 {
 	str[size] = '\0';
 	while (size--)

@@ -17,7 +17,7 @@ GNL_PATH = $(LIBS_PATH)/get_next_line
 GNL_ARCHIVE = $(ARCHIVES_PATH)/$(GNL)
 
 INPUT_FILE = input_file
-CMD1 = "ls -l"
+CMD1 = "cat"
 CMD2 = "grep -i pipex"
 
 OUTPUT_FILE = output_file
@@ -40,12 +40,11 @@ HEADER_FILE = pipex.h
 HEADER = $(addprefix $(INCLUDES_PATH)/,$(HEADER_FILE))
 
 SOURCE_FILES =	main.c\
+				executors.c\
 				getters.c\
-				setters.c\
-				parsers.c\
-				free.c\
 				handlers.c\
-				runners.c\
+				helpers.c\
+				parsers.c\
 
 SOURCES = $(addprefix $(SOURCES_PATH)/,$(SOURCE_FILES))
 
@@ -81,13 +80,11 @@ get_next_line_clean:
 	$(MAKE_EXTERNAL) $(GNL_PATH) fclean
 	$(REMOVE) $(GNL_ARCHIVE)
 
-
 run: $(NAME)
 	./$(NAME) $(INPUT_FILE) $(CMD1) $(CMD2) $(OUTPUT_FILE)
 
-
 valgrind: $(NAME)
-	@$(VALGRIND) ./$(NAME) $(INPUT_FILE) $(CMD1) $(CMD2) $(OUTPUT_FILE)
+	$(VALGRIND) ./$(NAME) $(INPUT_FILE) $(CMD1) $(CMD2) $(OUTPUT_FILE)
 
 re:	fclean all
 

@@ -5,57 +5,31 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/11 01:26:16 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/14 17:54:58 by vwildner         ###   ########.fr       */
+/*   Created: 2022/02/16 08:25:24 by vwildner          #+#    #+#             */
+/*   Updated: 2022/02/16 09:20:15 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include <pipex.h>
 
-void	handle_exit(char *err_msg, int pipex_errno, t_pipex *pipex)
+/* Handlers are the functions that should be able to handle
+ * any type of request concerning their roles.
+ * They are called by the main loop.
+ * They do not handle memory allocation.
+ */
+
+int	handle_rw(char *file, int oflag)
 {
-	perror(err_msg);
-	free_all(pipex);
-	exit(pipex_errno);
+	int	fd;
+
+	fd = open(file, oflag, 0644);
+	if (fd == -1)
+		handle_exit(file);
+	return (fd);
 }
 
-/* handle here document "<<" */
-int	handle_here_doc(t_pipex *self)
+void	handle_exit(const char *s)
 {
-	pid_t	pid;
-
-	if (pipe(self->fd) == -1)
-		handle_exit("`handle_here_doc`: error pipe", 13, self);
-	pid = fork();
-	if (pid < 0)
-		handle_exit("`handle_here_doc`: error fork", 14, self);
-	if (pid > 0)
-	{
-		close(self->fd[1]);
-		dup2(self->fd[0], STDIN_FILENO);
-		close(self->fd[0]);
-		waitpid(pid, NULL, 0);
-	}
-	else
-		set_here_doc_fd(self);
-	return (0);
-}
-
-static int	handle_file_exec(t_pipex *self, char **envp)
-{
-	int	i;
-
-	i = 0;
-	run_input_cmd(self, envp);
-	while (++i < self->nargs - 1)
-		run_iter_cmd(self, envp, i);
-	run_output_cmd(self, envp);
-	return (0);
-}
-
-int	handle_execution(t_pipex *self, char **envp)
-{
-	if (self->here_doc)
-		return (handle_here_doc(self));
-	return (handle_file_exec(self, envp));
+	perror(s);
+	exit(EXIT_FAILURE);
 }

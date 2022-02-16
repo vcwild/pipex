@@ -6,66 +6,97 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 19:47:17 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/14 17:52:53 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/16 09:52:04 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
-# define STDIN_FILENO 0
-# define STDOUT_FILENO 1
 
-
-# include <stdio.h>
-# include <errno.h>
-# include <string.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
 # include <libft.h>
 # include <get_next_line.h>
 
-typedef struct s_pipex
-{
-	char			***args;
-	char			**cmd_path;
-	char			**envp;
-	char			*input_path;
-	char			*output_path;
-	int				**pipes;
-	char			*limiter;
-	int				argc;
-	int				fd[2];
-	int				here_doc;
-	int				nargs;
-	int				npipes;
-}					t_pipex;
+/* file i/o */
+# define INPUT 0
+# define OUTPUT 1
 
-void	free_str(char **str);
-void	free_matrix(void ***mat);
-void	free_ptr(void **ptr);
-void	free_cmd(t_pipex *self, int cmd_pos);
-void	free_all(t_pipex *self);
+/* pipe ends */
+# define READ_END 0
+# define WRITE_END 1
 
-int		get_args(int argc, char **argv);
+/* libraries */
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
-int		set_mem_alloc(t_pipex *self);
-int		set_references(t_pipex *self, int argc, char **argv);
-int		set_input_path_fd(t_pipex *self);
-int		set_output_fd(t_pipex *self);
-int		set_abspath(t_pipex *self, int cmd_pos);
-void	set_here_doc_fd(t_pipex *self);
+/* handlers.c */
+/**
+ * @brief Handles the program exiting
+ *
+ * @param s The error message to be printed
+ */
+void	handle_exit(const char *s);
 
-int		parse_args(t_pipex *self, char **argv);
-int		parse_env_path(t_pipex *self, char **envp);
+/**
+ * @brief Handles file read and write flags
+ *
+ * @param file The file to be handled
+ * @param oflag The open permissions
+ * @return int Returns the file descriptor for the open file
+ */
+int		handle_rw(char *file, int oflag);
 
-void	handle_exit(char *err_msg, int pipex_errno, t_pipex *pipex);
-int		handle_execution(t_pipex *self, char **envp);
+/**
+ * @brief Gets the absolute path to the cmd
+ *
+ * @param cmd The command to be searched inside the path
+ * @param path The current environment path
+ * @return char*
+ */
+char	*get_abspath(char *cmd, const char *path);
 
-void	run_input_cmd(t_pipex *self, char **envp);
-void	run_iter_cmd(t_pipex *self, char **envp, int i);
-void	run_output_cmd(t_pipex *self, char **envp);
+/**
+ * @brief Executes a subrountine to read the standard input
+ *
+ * @param argv The delimiter to stop reading the standard input
+ */
+void	exec_read_stdin(char *delim);
+
+/**
+ * @brief Executes the command
+ *
+ * @param cmd The command to be executed
+ * @param envp The environment where the command is located
+ */
+void	exec_cmd(char *cmd, char *envp[]);
+
+/**
+ * @brief Executes the intermediate pipe redirections
+ *
+ * @param cmd The command to be executed
+ * @param envp The environment where the command is located
+ */
+void	exec_redir(char *cmd, char *envp[]);
+
+/**
+ * @brief Merges the two strings with a '/' in between
+ *
+ * @param origin The first string
+ * @param other The second string
+ * @return char* Returns the merged string
+ */
+char	*help_slash_merge(char const *origin, char const *other);
+
+/**
+ * @brief Parses the input while in here_doc mode
+ *
+ * @param delim The delimiter to stop reading the input
+ * @param fd The file descriptor to output the parsed input
+ */
+void	parse_here_doc(char *delim, int *fd);
 
 #endif

@@ -5,33 +5,42 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/09 09:56:10 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/13 17:42:54 by vwildner         ###   ########.fr       */
+/*   Created: 2022/02/16 08:29:30 by vwildner          #+#    #+#             */
+/*   Updated: 2022/02/16 09:18:44 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include <pipex.h>
 
-int	get_args(int argc, char **argv)
+/* Getters are the functions that will search for bytes of data.
+ * They are called by the main loop.
+ * They are responsible for freeing the memory they use.
+ */
+
+char	*get_abspath(char *cmd, const char *path)
 {
-	int	i;
+	char	*file;
+	char	*dir;
+	int		diff;
 
-	i = -1;
-	if (argc < 5)
+	while (*path)
 	{
-		perror("check_args usage: ./pipex <cmd1> <cmd2> <cmd3> <cmd4>\n");
-		return (1);
+		diff = ft_strchr(path, ':') - path;
+		if (diff < 0)
+			diff = ft_strlen(path);
+		dir = ft_substr(path, 0, diff);
+		file = help_slash_merge(dir, cmd);
+		free(dir);
+		if (access(file, X_OK) == 0)
+			return (file);
+		free(file);
+		if (ft_strlen(path) < (size_t)diff)
+			break ;
+		path += diff;
+		if (*path)
+			path++;
 	}
-	if (!ft_strnstr(argv[1], "here_doc", 10))
-	{
-		if (access(argv[1], F_OK) != 0)
-		{
-			perror(ft_strjoin("bash: ", argv[1]));
-			return (2);
-		}
-	}
-	printf("`check_args` Success!\n");
-	while (argv[++i])
-		printf("arg[%i]: %s\n", i, argv[i]);
-	return (0);
+	perror(ft_strjoin(cmd, ": command not found\n"));
+	exit(EXIT_FAILURE);
+	return (NULL);
 }

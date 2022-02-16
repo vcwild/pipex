@@ -5,74 +5,46 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 19:52:02 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/14 18:16:10 by vwildner         ###   ########.fr       */
+/*   Created: 2022/02/16 06:27:12 by vwildner          #+#    #+#             */
+/*   Updated: 2022/02/16 10:02:24 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include <pipex.h>
 
-static void read_pipex(t_pipex *self, int argc, char **argv, char **envp)
+static	int	valid_arguments(int argc, char *argv[])
 {
-	if (get_args(argc, argv))
-		exit(1);
-	if (set_references(self, argc, argv))
-		exit(2);
-	if (set_mem_alloc(self))
-		exit(3);
-	if (parse_args(self, argv))
-		exit(4);
-	if (parse_env_path(self, envp))
-		exit(5);
+	if ((argc >= 5 && ft_strncmp(argv[1], "here_doc", 9))
+		|| argc >= 6)
+		return (0);
+	return (1);
 }
 
-static void open_input(t_pipex *self)
+static int	read_input(int argc, char *argv[], int *fd)
 {
-	if (self->here_doc == 0)
+	if (!ft_strncmp(argv[1], "here_doc", 9))
 	{
-		if (set_input_path_fd(self))
-			handle_exit(ft_strjoin("set_input_path_fd: ", self->input_path), 6, self);
+		exec_read_stdin(argv[2]);
+		fd[OUTPUT] = handle_rw(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND);
+		return (2);
 	}
-	printf("`open_input_file` Success!\n");
+	fd[INPUT] = handle_rw(argv[1], O_RDONLY);
+	fd[OUTPUT] = handle_rw(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC);
+	dup2(fd[INPUT], STDIN_FILENO);
+	return (1);
 }
 
-static void create_pipes(t_pipex *self)
+int	main(int argc, char *argv[], char *envp[])
 {
-	int i;
+	int	arg_pos;
+	int	fd[2];
 
-	self->pipes = ft_calloc(self->npipes + 1,
-							sizeof(self->pipes));
-	if (self->pipes == NULL)
-		handle_exit("create_pipes: error allocating pipes",
-					1, self);
-	self->pipes[self->npipes] = NULL;
-	i = -1;
-	while (++i < self->npipes)
-	{
-		self->pipes[i] = ft_calloc(2, sizeof(self->pipes[i]));
-		if (self->pipes[i] == NULL)
-			handle_exit("create_pipes: error allocating pipe",
-						2, self);
-		if (pipe(self->pipes[i]) == -1)
-			handle_exit("create_pipes: error while creating pipe", 3, self);
-	}
-	printf("`create_pipes` Success!\n");
-}
-
-static void exec_pipex(t_pipex *self, char **envp)
-{
-	if (handle_execution(self, envp))
-		handle_exit("handle_execution: error while executing pipex", 4, self);
-}
-
-int main(int argc, char **argv, char **envp)
-{
-	t_pipex pipex;
-
-	read_pipex(&pipex, argc, argv, envp);
-	create_pipes(&pipex);
-	open_input(&pipex);
-	exec_pipex(&pipex, envp);
-	handle_exit("", 0, &pipex);
-	return (0);
+	if (valid_arguments(argc, argv))
+		handle_exit("Invalid arguments\n");
+	arg_pos = read_input(argc, argv, fd);
+	while (++arg_pos < argc - 2)
+		exec_redir(argv[arg_pos], envp);
+	dup2(fd[OUTPUT], STDOUT_FILENO);
+	exec_cmd(argv[arg_pos], envp);
+	return (EXIT_FAILURE);
 }

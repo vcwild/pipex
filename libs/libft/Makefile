@@ -18,22 +18,22 @@ RE = rm -f
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
-	ar -rcs $(NAME) $(OBJECTS)
+	@ar -rcs $(NAME) $(OBJECTS)
 
 $(OBJECTS): $(FILES)
-	$(CC) $(FLAGS) -c $(FILES)
+	@$(CC) $(FLAGS) -c $(FILES)
 
 bonus: $(BONUS_OBJECTS)
-	ar -rcs $(NAME) $(BONUS_OBJECTS)
+	@ar -rcs $(NAME) $(BONUS_OBJECTS)
 
 $(BONUS_OBJECTS): $(BONUS)
-	$(CC) $(FLAGS) -c $(BONUS)
+	@$(CC) $(FLAGS) -c $(BONUS)
 
 clean:
-	$(RM) $(OBJECTS) $(BONUS_OBJECTS)
+	@$(RM) $(OBJECTS) $(BONUS_OBJECTS)
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
 
 re: fclean all
 

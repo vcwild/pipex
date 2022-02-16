@@ -6,7 +6,7 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 15:40:32 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/11 22:42:26 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/14 17:16:16 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,17 @@ void	run_input_cmd(t_pipex *self, char **envp)
 		if (set_abspath(self, 0))
 			free_cmd(self, 0);
 		if (dup2(self->fd[0], STDIN_FILENO) == -1)
-			handle_exit("run_first_cmd: error duplicating fd",
-				2, self);
+			handle_exit("run_first_cmd: error duplicating fd", 2, self);
 		if (dup2(self->pipes[0][1], STDOUT_FILENO) == -1)
-			handle_exit("run_first_cmd: error duplicating fd",
-				3, self);
-		if (execve(self->cmd_path[0], self->args[0],
-				envp) == -1)
+			handle_exit("run_first_cmd: error duplicating fd", 3, self);
+		if (execve(self->cmd_path[0], self->args[0], envp) == -1)
 			handle_exit("run_first_cmd: error func exec", 4, self);
 	}
 	else
 	{
-		wait(NULL);
+		waitpid(pid, NULL, 0);
+		if (WEXITSTATUS(0) == EXIT_FAILURE)
+			handle_exit("run_iter_cmd: error in wait function", 5, self);
 		close(self->pipes[0][1]);
 	}
 }
@@ -67,7 +66,11 @@ void	run_iter_cmd(t_pipex *self, char **envp, int i)
 			handle_exit("run_iter_cmd: error in exec function", 20, self);
 	}
 	else
-		wait(NULL);
+	{
+		waitpid(pid, NULL, 0);
+		if (WEXITSTATUS(0) == EXIT_FAILURE)
+			handle_exit("run_iter_cmd: error in wait function", 21, self);
+	}
 }
 
 void	run_output_cmd(t_pipex *self, char **envp)

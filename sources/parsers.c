@@ -6,7 +6,7 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 23:08:29 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/11 22:45:10 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/13 17:10:06 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	parse_args(t_pipex *self, char **argv)
 	{
 		j = -1;
 		while (self->args[i][++j])
-			printf("cmds[%i][%i]: %s\n", i, j, self->args[i][j]);
+			printf("pipex->args[%i][%i]: %s\n", i, j, self->args[i][j]);
 	}
 	// End of logging code
 	return (0);

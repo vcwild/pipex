@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/10 20:09:20 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/11 22:25:39 by vwildner         ###   ########.fr       */
+/*   Created: 2022/02/10 20n :09:20 by vwildner          #+#    #+#             */
+/*   Updated: 2022/02/13 18:17:39 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	free_all(t_pipex *self)
 	free_str(self->envp);
 	if (self->pipes)
 		free_matrix((void *)&self->pipes);
-
 	free_ptr((void *)&self->cmd_path);
 }
 
@@ -69,8 +68,7 @@ void	free_cmd(t_pipex *self, int cmd_pos)
 			": command not found\n");
 	len = ft_strlen(err_msg);
 	cmd_pos = write(2, err_msg, len);
-    free(err_msg);
+	free(err_msg);
 	free_all(self);
 	exit(127);
-	return ;
 }

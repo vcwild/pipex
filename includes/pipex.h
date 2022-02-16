@@ -6,7 +6,7 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 19:47:17 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/11 22:42:47 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/02/14 17:52:53 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <libft.h>
+# include <get_next_line.h>
 
 typedef struct s_pipex
 {
@@ -34,6 +35,7 @@ typedef struct s_pipex
 	char			*input_path;
 	char			*output_path;
 	int				**pipes;
+	char			*limiter;
 	int				argc;
 	int				fd[2];
 	int				here_doc;
@@ -51,14 +53,16 @@ int		get_args(int argc, char **argv);
 
 int		set_mem_alloc(t_pipex *self);
 int		set_references(t_pipex *self, int argc, char **argv);
-int		set_input_fd(t_pipex *self);
+int		set_input_path_fd(t_pipex *self);
 int		set_output_fd(t_pipex *self);
 int		set_abspath(t_pipex *self, int cmd_pos);
+void	set_here_doc_fd(t_pipex *self);
 
 int		parse_args(t_pipex *self, char **argv);
 int		parse_env_path(t_pipex *self, char **envp);
 
 void	handle_exit(char *err_msg, int pipex_errno, t_pipex *pipex);
+int		handle_execution(t_pipex *self, char **envp);
 
 void	run_input_cmd(t_pipex *self, char **envp);
 void	run_iter_cmd(t_pipex *self, char **envp, int i);

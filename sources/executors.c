@@ -6,7 +6,7 @@
 /*   By: vwildner <vwildner@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 08:31:48 by vwildner          #+#    #+#             */
-/*   Updated: 2022/02/16 10:06:35 by vwildner         ###   ########.fr       */
+/*   Updated: 2022/07/31 14:08:46 by vwildner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	exec_read_stdin(char *delim)
 		handle_exit("`exec_read_stdin`: Error while forking\n");
 	if (pid > 0)
 	{
-		close(fd[OUTPUT]);
-		dup2(fd[INPUT], STDIN_FILENO);
-		close(fd[INPUT]);
+		close(fd[STDOUT_FILENO]);
+		dup2(fd[STDIN_FILENO], STDIN_FILENO);
+		close(fd[STDIN_FILENO]);
 		waitpid(pid, NULL, 0);
 		return ;
 	}
@@ -74,18 +74,18 @@ void	exec_redir(char *cmd, char *envp[])
 	pid = fork();
 	if (pid < 0)
 		handle_exit("`exec_redir`: Error while forking redirect\n");
-	if (pid > 0)
+	if (!pid)
 	{
-		close(fd[OUTPUT]);
-		dup2(fd[INPUT], STDIN_FILENO);
-		close(fd[INPUT]);
-		waitpid(pid, &status, 0);
-		if (WEXITSTATUS(status) == EXIT_FAILURE)
-			exit(EXIT_FAILURE);
+		close(fd[STDIN_FILENO]);
+		dup2(fd[STDOUT_FILENO], STDOUT_FILENO);
+		close(fd[STDOUT_FILENO]);
+		exec_cmd(cmd, envp);
 		return ;
 	}
-	close(fd[INPUT]);
-	dup2(fd[OUTPUT], STDOUT_FILENO);
-	close(fd[OUTPUT]);
-	exec_cmd(cmd, envp);
+	close(fd[STDOUT_FILENO]);
+	dup2(fd[STDIN_FILENO], STDIN_FILENO);
+	close(fd[STDIN_FILENO]);
+	waitpid(pid, &status, 0);
+	if (WEXITSTATUS(status) == EXIT_FAILURE)
+		exit(EXIT_FAILURE);
 }
